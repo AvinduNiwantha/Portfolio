@@ -3,10 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Website</title>
+  <title>Avindu Niwanthaka</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --teal: #2ec4b6;
+      --gold: #f5a623;
+      --bg: #f8f8f6;
+      --dark: #1a1a2e;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Subtle background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(46,196,182,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(245,166,35,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .orb1 { width: 400px; height: 400px; background: var(--teal); top: -100px; left: -100px; animation-delay: 0s; }
+    .orb2 { width: 300px; height: 300px; background: var(--gold); bottom: -80px; right: -80px; animation-delay: -4s; }
+    .orb3 { width: 200px; height: 200px; background: var(--teal); bottom: 20%; left: 10%; animation-delay: -8s; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(30px, 20px) scale(1.08); }
+    }
+
+    /* Hero container */
+    .hero {
+      position: relative;
+      z-index: 10;
+      padding: 3rem;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    /* Thin decorative line */
+    .line-accent {
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      margin-bottom: 2.5rem;
+      border-radius: 2px;
+      animation: growLine 0.8s ease forwards 0.3s;
+    }
+    @keyframes growLine {
+      to { width: 60px; }
+    }
+
+    /* "Hello I'm" prefix */
+    .greeting {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 300;
+      color: #888;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s ease forwards 0.5s;
+      margin-bottom: 0.4rem;
+    }
+
+    /* Typewriter name */
+    .name-wrap {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 900;
+      color: var(--teal);
+      line-height: 1.05;
+      margin-bottom: 1.8rem;
+      min-height: 1.1em;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 4px;
+      background: var(--teal);
+      margin-left: 4px;
+      border-radius: 2px;
+      animation: blink 0.7s step-end infinite;
+      vertical-align: middle;
+      height: 0.85em;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* Subtitle line */
+    .subtitle {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-weight: 400;
+      color: #555;
+      opacity: 0;
+      transform: translateY(14px);
+      line-height: 1.6;
+    }
+    .subtitle.visible {
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    /* Gold highlighted text with glow */
+    .gold {
+      color: var(--gold);
+      font-weight: 500;
+      position: relative;
+      animation: goldGlow 2.5s ease-in-out infinite alternate;
+    }
+    @keyframes goldGlow {
+      0%   { text-shadow: 0 0 6px rgba(245,166,35,0.4), 0 0 12px rgba(245,166,35,0.2); }
+      50%  { text-shadow: 0 0 12px rgba(245,166,35,0.7), 0 0 28px rgba(245,166,35,0.4), 0 0 50px rgba(245,166,35,0.2); }
+      100% { text-shadow: 0 0 8px rgba(245,166,35,0.5), 0 0 20px rgba(245,166,35,0.3); }
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 5s;
+    }
+    .scroll-hint span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+    .scroll-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: bounce 1.4s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 1; }
+      50%       { transform: translateY(8px); opacity: 0.4; }
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .hero { padding: 2rem; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello World! </h1>
-  <p>This is my first website hosted on GitHub Pages.</p>
+
+  <!-- Falling lines canvas -->
+  <canvas id="linesCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+
+  <!-- Background orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="hero">
+    <div class="line-accent"></div>
+    <div class="greeting">Hello, I'm</div>
+    <div class="name-wrap">
+      <span id="typed-name"></span><span class="cursor" id="cursor"></span>
+    </div>
+    <p class="subtitle" id="subtitle">
+      Undergraduate at <span class="gold">Open University of Sri Lanka</span>
+    </p>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+
+  <script>
+    const fullName   = "Avindu Niwanthaka";
+    const nameEl     = document.getElementById('typed-name');
+    const cursorEl   = document.getElementById('cursor');
+    const subtitleEl = document.getElementById('subtitle');
+
+    let i = 0;
+    const startDelay = 900; // ms before typing starts
+    const typeSpeed  = 80;  // ms per character
+
+    function type() {
+      if (i < fullName.length) {
+        nameEl.textContent += fullName[i];
+        i++;
+        setTimeout(type, typeSpeed);
+      } else {
+        // Typing done — hide cursor after short pause, reveal subtitle
+        setTimeout(() => {
+          cursorEl.style.display = 'none';
+          subtitleEl.classList.add('visible');
+        }, 400);
+      }
+    }
+
+    setTimeout(type, startDelay);
+  </script>
+
+  <script>
+    // ── Falling Lines Canvas ──
+    const canvas = document.getElementById('linesCanvas');
+    const ctx    = canvas.getContext('2d');
+
+    let W, H, lines;
+
+    const COLORS = [
+      'rgba(46,196,182,',
+      'rgba(245,166,35,',
+      'rgba(46,196,182,',
+      'rgba(180,220,218,',
+    ];
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    function createLine() {
+      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      return {
+        x:       randomBetween(0, W),
+        y:       randomBetween(-300, -10),
+        length:  randomBetween(40, 130),
+        speed:   randomBetween(1.2, 3.5),
+        width:   randomBetween(0.5, 2.5),
+        opacity: randomBetween(0.08, 0.28),
+        color,
+        drift:   randomBetween(-0.15, 0.15),
+      };
+    }
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      const count = Math.floor(W / 14);
+      lines = Array.from({ length: count }, createLine);
+      lines.forEach(l => { l.y = randomBetween(-H, H); });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      for (const l of lines) {
+        const grad = ctx.createLinearGradient(l.x, l.y, l.x, l.y + l.length);
+        grad.addColorStop(0,   l.color + '0)');
+        grad.addColorStop(0.3, l.color + l.opacity + ')');
+        grad.addColorStop(1,   l.color + '0)');
+
+        ctx.beginPath();
+        ctx.moveTo(l.x, l.y);
+        ctx.lineTo(l.x, l.y + l.length);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = l.width;
+        ctx.lineCap     = 'round';
+        ctx.stroke();
+
+        l.y += l.speed;
+        l.x += l.drift;
+
+        if (l.y - l.length > H) {
+          l.y      = randomBetween(-150, -10);
+          l.x      = randomBetween(0, W);
+          l.speed  = randomBetween(1.2, 3.5);
+          l.length = randomBetween(40, 130);
+          l.width  = randomBetween(0.5, 1.8);
+          l.opacity= randomBetween(0.08, 0.28);
+          l.drift  = randomBetween(-0.15, 0.15);
+          l.color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+  </script>
 </body>
 </html>
