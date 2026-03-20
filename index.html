@@ -11,8 +11,7 @@
     :root {
       --teal: #2ec4b6;
       --gold: #f5a623;
-      --bg: #f8f8f6;
-      --dark: #1a1a2e;
+      --bg:   #07101f;
     }
 
     body {
@@ -26,174 +25,172 @@
       position: relative;
     }
 
-    /* Subtle background texture */
+    /* Deep colour wash */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0; z-index: 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(46,196,182,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(245,166,35,0.06) 0%, transparent 50%);
+        radial-gradient(ellipse at 15% 55%, rgba(46,196,182,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 15%, rgba(245,166,35,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 55% 90%, rgba(60,80,200,0.20) 0%, transparent 50%);
       pointer-events: none;
     }
 
-    /* Floating orbs */
+    /* Floating colour orbs */
     .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.18;
-      pointer-events: none;
-      animation: drift 12s ease-in-out infinite alternate;
+      position: fixed; border-radius: 50%;
+      filter: blur(90px); pointer-events: none;
+      animation: drift 14s ease-in-out infinite alternate;
+      z-index: 1;
     }
-    .orb1 { width: 400px; height: 400px; background: var(--teal); top: -100px; left: -100px; animation-delay: 0s; }
-    .orb2 { width: 300px; height: 300px; background: var(--gold); bottom: -80px; right: -80px; animation-delay: -4s; }
-    .orb3 { width: 200px; height: 200px; background: var(--teal); bottom: 20%; left: 10%; animation-delay: -8s; }
+    .orb1 { width:520px; height:520px; background:rgba(46,196,182,0.28);  top:-160px;   left:-130px;  animation-delay:0s;  }
+    .orb2 { width:400px; height:400px; background:rgba(245,166,35,0.22);  bottom:-110px; right:-110px; animation-delay:-5s; }
+    .orb3 { width:280px; height:280px; background:rgba(46,100,220,0.24);  bottom:20%;   left:6%;      animation-delay:-9s; }
+    .orb4 { width:220px; height:220px; background:rgba(46,196,182,0.18);  top:25%;      right:10%;    animation-delay:-3s; }
 
     @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(30px, 20px) scale(1.08); }
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(35px,25px) scale(1.1); }
     }
 
-    /* Hero container */
+    /* Full-screen glass layer over background */
+    .glass-bg {
+      position: fixed; inset: 0; z-index: 2;
+      background: rgba(7, 16, 31, 0.45);
+      backdrop-filter: blur(3px) saturate(130%);
+      -webkit-backdrop-filter: blur(3px) saturate(130%);
+      pointer-events: none;
+    }
+
+    /* Falling lines canvas */
+    #linesCanvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      z-index: 3; pointer-events: none;
+    }
+
+    /* Glassmorphism hero card */
     .hero {
-      position: relative;
-      z-index: 10;
-      padding: 3rem;
-      max-width: 700px;
-      width: 100%;
+      position: relative; z-index: 10;
+      padding: 3.5rem 4rem;
+      max-width: 680px; width: 90%;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(30px) saturate(170%);
+      -webkit-backdrop-filter: blur(30px) saturate(170%);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.13);
+      box-shadow:
+        0 16px 56px rgba(0,0,0,0.6),
+        0 1px 0 rgba(255,255,255,0.12) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset;
     }
 
-    /* Thin decorative line */
+    /* Top-edge shimmer */
+    .hero::before {
+      content: '';
+      position: absolute; top:0; left:12%; right:12%; height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      border-radius: 50%;
+    }
+
+    /* Thin teal accent bar */
     .line-accent {
-      width: 0;
-      height: 3px;
+      width: 0; height: 3px;
       background: linear-gradient(90deg, var(--teal), transparent);
-      margin-bottom: 2.5rem;
-      border-radius: 2px;
+      margin-bottom: 2.2rem; border-radius: 2px;
       animation: growLine 0.8s ease forwards 0.3s;
     }
-    @keyframes growLine {
-      to { width: 60px; }
-    }
+    @keyframes growLine { to { width: 60px; } }
 
-    /* "Hello I'm" prefix */
+    /* "Hello, I'm" label */
     .greeting {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-size: clamp(0.85rem, 2vw, 1rem);
       font-weight: 300;
-      color: #888;
-      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.40);
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      opacity: 0;
-      transform: translateY(10px);
+      opacity: 0; transform: translateY(10px);
       animation: fadeUp 0.6s ease forwards 0.5s;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
     /* Typewriter name */
     .name-wrap {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-size: clamp(2.6rem, 7vw, 5rem);
       font-weight: 900;
       color: var(--teal);
       line-height: 1.05;
       margin-bottom: 1.8rem;
-      min-height: 1.1em;
+      min-height: 1.15em;
+      filter: drop-shadow(0 0 20px rgba(46,196,182,0.40));
     }
 
     .cursor {
-      display: inline-block;
-      width: 4px;
-      background: var(--teal);
-      margin-left: 4px;
-      border-radius: 2px;
+      display: inline-block; width: 4px; height: 0.82em;
+      background: var(--teal); margin-left: 4px;
+      border-radius: 2px; vertical-align: middle;
       animation: blink 0.7s step-end infinite;
-      vertical-align: middle;
-      height: 0.85em;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
-    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    /* Subtitle line */
+    /* Subtitle */
     .subtitle {
-      font-family: 'DM Sans', sans-serif;
-      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-size: clamp(0.95rem, 2.2vw, 1.2rem);
       font-weight: 400;
-      color: #555;
-      opacity: 0;
-      transform: translateY(14px);
-      line-height: 1.6;
+      color: rgba(255,255,255,0.50);
+      opacity: 0; transform: translateY(14px);
+      line-height: 1.7;
     }
-    .subtitle.visible {
-      animation: fadeUp 0.7s ease forwards;
-    }
+    .subtitle.visible { animation: fadeUp 0.7s ease forwards; }
 
-    /* Gold highlighted text with glow */
+    /* Gold glowing text */
     .gold {
-      color: var(--gold);
-      font-weight: 500;
-      position: relative;
+      color: var(--gold); font-weight: 500;
       animation: goldGlow 2.5s ease-in-out infinite alternate;
     }
     @keyframes goldGlow {
-      0%   { text-shadow: 0 0 6px rgba(245,166,35,0.4), 0 0 12px rgba(245,166,35,0.2); }
-      50%  { text-shadow: 0 0 12px rgba(245,166,35,0.7), 0 0 28px rgba(245,166,35,0.4), 0 0 50px rgba(245,166,35,0.2); }
-      100% { text-shadow: 0 0 8px rgba(245,166,35,0.5), 0 0 20px rgba(245,166,35,0.3); }
+      0%   { text-shadow: 0 0 6px rgba(245,166,35,0.5),  0 0 14px rgba(245,166,35,0.25); }
+      50%  { text-shadow: 0 0 14px rgba(245,166,35,0.9), 0 0 32px rgba(245,166,35,0.5),  0 0 60px rgba(245,166,35,0.25); }
+      100% { text-shadow: 0 0 8px rgba(245,166,35,0.6),  0 0 22px rgba(245,166,35,0.35); }
     }
 
     /* Scroll hint */
     .scroll-hint {
-      position: fixed;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0;
-      animation: fadeUp 1s ease forwards 5s;
+      position: fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      opacity:0; animation:fadeUp 1s ease forwards 5s; z-index:20;
     }
     .scroll-hint span {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #aaa;
+      font-size:0.65rem; letter-spacing:0.2em;
+      text-transform:uppercase; color:rgba(255,255,255,0.28);
     }
     .scroll-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--teal);
-      animation: bounce 1.4s ease-in-out infinite;
+      width:6px; height:6px; border-radius:50%; background:var(--teal);
+      animation:bounce 1.4s ease-in-out infinite;
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); opacity: 1; }
-      50%       { transform: translateY(8px); opacity: 0.4; }
-    }
+    @keyframes bounce { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(8px);opacity:0.4} }
 
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      .hero { padding: 2rem; }
-    }
+    @media (max-width:480px) { .hero { padding:2.2rem 1.8rem; } }
   </style>
 </head>
 <body>
 
-  <!-- Falling lines canvas -->
-  <canvas id="linesCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
-
-  <!-- Background orbs -->
+  <!-- Colour orbs -->
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
 
+  <!-- Glass overlay on background -->
+  <div class="glass-bg"></div>
+
+  <!-- Falling lines -->
+  <canvas id="linesCanvas"></canvas>
+
+  <!-- Hero glass card -->
   <div class="hero">
     <div class="line-accent"></div>
     <div class="greeting">Hello, I'm</div>
@@ -210,103 +207,92 @@
     <div class="scroll-dot"></div>
   </div>
 
+  <!-- Typewriter -->
   <script>
     const fullName   = "Avindu Niwanthaka";
     const nameEl     = document.getElementById('typed-name');
     const cursorEl   = document.getElementById('cursor');
     const subtitleEl = document.getElementById('subtitle');
-
     let i = 0;
-    const startDelay = 900; // ms before typing starts
-    const typeSpeed  = 80;  // ms per character
 
     function type() {
       if (i < fullName.length) {
-        nameEl.textContent += fullName[i];
-        i++;
-        setTimeout(type, typeSpeed);
+        nameEl.textContent += fullName[i++];
+        setTimeout(type, 80);
       } else {
-        // Typing done — hide cursor after short pause, reveal subtitle
         setTimeout(() => {
           cursorEl.style.display = 'none';
           subtitleEl.classList.add('visible');
         }, 400);
       }
     }
-
-    setTimeout(type, startDelay);
+    setTimeout(type, 900);
   </script>
 
+  <!-- Falling lines animation -->
   <script>
-    // ── Falling Lines Canvas ──
     const canvas = document.getElementById('linesCanvas');
     const ctx    = canvas.getContext('2d');
-
     let W, H, lines;
 
     const COLORS = [
-      'rgba(46,196,182,',
-      'rgba(245,166,35,',
-      'rgba(46,196,182,',
-      'rgba(180,220,218,',
+      'rgba(46,196,182,',   // teal
+      'rgba(46,196,182,',   // teal (more weight)
+      'rgba(245,166,35,',   // gold
+      'rgba(140,210,255,',  // ice blue
     ];
 
-    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+    const rnd = (a, b) => a + Math.random() * (b - a);
 
-    function createLine() {
-      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    function makeLine() {
       return {
-        x:       randomBetween(0, W),
-        y:       randomBetween(-300, -10),
-        length:  randomBetween(40, 130),
-        speed:   randomBetween(1.2, 3.5),
-        width:   randomBetween(0.5, 2.5),
-        opacity: randomBetween(0.08, 0.28),
-        color,
-        drift:   randomBetween(-0.15, 0.15),
+        x:     rnd(0, W),
+        y:     rnd(-H, 0),
+        len:   rnd(50, 145),
+        speed: rnd(1.0, 3.2),
+        w:     rnd(0.4, 1.7),
+        op:    rnd(0.10, 0.30),
+        drift: rnd(-0.18, 0.18),
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
       };
     }
 
     function resize() {
       W = canvas.width  = window.innerWidth;
       H = canvas.height = window.innerHeight;
-      const count = Math.floor(W / 14);
-      lines = Array.from({ length: count }, createLine);
-      lines.forEach(l => { l.y = randomBetween(-H, H); });
+      lines = Array.from({ length: Math.floor(W / 13) }, makeLine);
     }
 
     function draw() {
       ctx.clearRect(0, 0, W, H);
-
       for (const l of lines) {
-        const grad = ctx.createLinearGradient(l.x, l.y, l.x, l.y + l.length);
-        grad.addColorStop(0,   l.color + '0)');
-        grad.addColorStop(0.3, l.color + l.opacity + ')');
-        grad.addColorStop(1,   l.color + '0)');
+        const g = ctx.createLinearGradient(l.x, l.y, l.x, l.y + l.len);
+        g.addColorStop(0,    l.color + '0)');
+        g.addColorStop(0.35, l.color + l.op + ')');
+        g.addColorStop(1,    l.color + '0)');
 
         ctx.beginPath();
         ctx.moveTo(l.x, l.y);
-        ctx.lineTo(l.x, l.y + l.length);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth   = l.width;
+        ctx.lineTo(l.x, l.y + l.len);
+        ctx.strokeStyle = g;
+        ctx.lineWidth   = l.w;
         ctx.lineCap     = 'round';
         ctx.stroke();
 
         l.y += l.speed;
         l.x += l.drift;
 
-        if (l.y - l.length > H) {
-          l.y      = randomBetween(-150, -10);
-          l.x      = randomBetween(0, W);
-          l.speed  = randomBetween(1.2, 3.5);
-          l.length = randomBetween(40, 130);
-          l.width  = randomBetween(0.5, 1.8);
-          l.opacity= randomBetween(0.08, 0.28);
-          l.drift  = randomBetween(-0.15, 0.15);
-          l.color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+        if (l.y > H + l.len) {
+          l.y    = rnd(-160, -20);
+          l.x    = rnd(0, W);
+          l.len  = rnd(50, 145);
+          l.speed= rnd(1.0, 3.2);
+          l.w    = rnd(0.4, 1.7);
+          l.op   = rnd(0.10, 0.30);
+          l.drift= rnd(-0.18, 0.18);
+          l.color= COLORS[Math.floor(Math.random() * COLORS.length)];
         }
       }
-
       requestAnimationFrame(draw);
     }
 
