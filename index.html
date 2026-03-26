@@ -1,211 +1,419 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Avindu Niwanthaka</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     :root {
       --teal: #2ec4b6;
       --gold: #f5a623;
-      --bg:   #07101f;
     }
+
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
 
     body {
-      background: var(--bg);
+      background: #050d1a;
       font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Deep colour wash */
-    body::before {
-      content: '';
+    /* ── Fixed background layer ── */
+    .bg-layer {
       position: fixed; inset: 0; z-index: 0;
       background:
-        radial-gradient(ellipse at 15% 55%, rgba(46,196,182,0.22) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 15%, rgba(245,166,35,0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 55% 90%, rgba(60,80,200,0.20) 0%, transparent 50%);
+        radial-gradient(ellipse at 10% 60%, rgba(46,196,182,0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 10%, rgba(245,166,35,0.20) 0%, transparent 46%),
+        radial-gradient(ellipse at 50% 100%,rgba(40,70,220,0.22)  0%, transparent 50%);
       pointer-events: none;
     }
 
-    /* Floating colour orbs */
+    /* ── Colour orbs ── */
     .orb {
       position: fixed; border-radius: 50%;
-      filter: blur(90px); pointer-events: none;
-      animation: drift 14s ease-in-out infinite alternate;
-      z-index: 1;
+      filter: blur(110px); pointer-events: none; z-index: 1;
+      animation: drift 16s ease-in-out infinite alternate;
     }
-    .orb1 { width:520px; height:520px; background:rgba(46,196,182,0.28);  top:-160px;   left:-130px;  animation-delay:0s;  }
-    .orb2 { width:400px; height:400px; background:rgba(245,166,35,0.22);  bottom:-110px; right:-110px; animation-delay:-5s; }
-    .orb3 { width:280px; height:280px; background:rgba(46,100,220,0.24);  bottom:20%;   left:6%;      animation-delay:-9s; }
-    .orb4 { width:220px; height:220px; background:rgba(46,196,182,0.18);  top:25%;      right:10%;    animation-delay:-3s; }
-
+    .orb1{width:580px;height:580px;background:rgba(46,196,182,0.32);top:-180px; left:-150px; animation-delay:0s;  }
+    .orb2{width:460px;height:460px;background:rgba(245,166,35,0.25);bottom:-140px;right:-130px;animation-delay:-6s; }
+    .orb3{width:320px;height:320px;background:rgba(40,90,230,0.28); bottom:15%;  left:3%;     animation-delay:-11s;}
+    .orb4{width:250px;height:250px;background:rgba(46,196,182,0.22);top:20%;     right:7%;    animation-delay:-3s; }
     @keyframes drift {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(35px,25px) scale(1.1); }
+      from { transform:translate(0,0) scale(1); }
+      to   { transform:translate(40px,28px) scale(1.12); }
     }
 
-    /* Full-screen glass layer over background */
-    .glass-bg {
-      position: fixed; inset: 0; z-index: 2;
-      background: rgba(7, 16, 31, 0.45);
-      backdrop-filter: blur(3px) saturate(130%);
-      -webkit-backdrop-filter: blur(3px) saturate(130%);
-      pointer-events: none;
-    }
-
-    /* Falling lines canvas */
+    /* ── Falling lines canvas ── */
     #linesCanvas {
       position: fixed; top:0; left:0;
       width:100%; height:100%;
-      z-index: 3; pointer-events: none;
+      z-index: 2; pointer-events: none;
     }
 
-    /* Glassmorphism hero card */
-    .hero {
-      position: relative; z-index: 10;
-      padding: 3.5rem 4rem;
-      max-width: 680px; width: 90%;
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(30px) saturate(170%);
-      -webkit-backdrop-filter: blur(30px) saturate(170%);
-      border-radius: 28px;
-      border: 1px solid rgba(255,255,255,0.13);
+    /* ── Shared glass card mixin ── */
+    .glass-card {
+      background: linear-gradient(135deg,
+        rgba(255,255,255,0.11) 0%,
+        rgba(255,255,255,0.05) 50%,
+        rgba(255,255,255,0.08) 100%
+      );
+      backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+      -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+      border-radius: 32px;
+      border-top:   1.5px solid rgba(255,255,255,0.30);
+      border-left:  1px   solid rgba(255,255,255,0.16);
+      border-right: 1px   solid rgba(255,255,255,0.08);
+      border-bottom:1px   solid rgba(255,255,255,0.05);
       box-shadow:
-        0 16px 56px rgba(0,0,0,0.6),
-        0 1px 0 rgba(255,255,255,0.12) inset,
-        0 -1px 0 rgba(0,0,0,0.3) inset;
+        0 32px 80px rgba(0,0,0,0.70),
+        0 10px 28px rgba(0,0,0,0.45),
+        3px 3px 0 rgba(255,255,255,0.07) inset,
+       -2px -2px 0 rgba(0,0,0,0.18) inset;
+      position: relative;
+    }
+    .glass-card::before {
+      content:'';
+      position:absolute; top:0; left:6%; right:6%; height:1.5px;
+      background:linear-gradient(90deg,
+        transparent 0%, rgba(255,255,255,0.20) 20%,
+        rgba(255,255,255,0.60) 50%, rgba(255,255,255,0.20) 80%, transparent 100%);
+      border-radius:50%;
+    }
+    .glass-card::after {
+      content:'';
+      position:absolute; bottom:0; left:22%; right:22%; height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
     }
 
-    /* Top-edge shimmer */
-    .hero::before {
-      content: '';
-      position: absolute; top:0; left:12%; right:12%; height:1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-      border-radius: 50%;
+    /* ════════════════════════════════════
+       SECTION 1 — HERO
+    ════════════════════════════════════ */
+    .section-hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 5;
+      scroll-snap-align: start;
+      padding: 2rem;
     }
 
-    /* Thin teal accent bar */
+    .hero {
+      width: 90%; max-width: 680px;
+      padding: 4rem 4.5rem;
+      animation: breathe 5s ease-in-out infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes breathe {
+      0%   { transform:scale(1);     box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 10px 28px rgba(0,0,0,0.45), 3px 3px 0 rgba(255,255,255,0.07) inset, -2px -2px 0 rgba(0,0,0,0.18) inset, 0 0 0px rgba(46,196,182,0.0); }
+      50%  { transform:scale(1.025); box-shadow: 0 42px 100px rgba(0,0,0,0.60), 0 14px 36px rgba(0,0,0,0.38), 3px 3px 0 rgba(255,255,255,0.11) inset, -2px -2px 0 rgba(0,0,0,0.14) inset, 0 0 45px rgba(46,196,182,0.22), 0 0 90px rgba(46,196,182,0.10); }
+      100% { transform:scale(1);     box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 10px 28px rgba(0,0,0,0.45), 3px 3px 0 rgba(255,255,255,0.07) inset, -2px -2px 0 rgba(0,0,0,0.18) inset, 0 0 0px rgba(46,196,182,0.0); }
+    }
+
     .line-accent {
-      width: 0; height: 3px;
-      background: linear-gradient(90deg, var(--teal), transparent);
-      margin-bottom: 2.2rem; border-radius: 2px;
-      animation: growLine 0.8s ease forwards 0.3s;
+      width:0; height:3px;
+      background:linear-gradient(90deg,var(--teal),transparent);
+      margin-bottom:2.2rem; border-radius:2px;
+      animation:growLine 0.8s ease forwards 0.3s;
     }
-    @keyframes growLine { to { width: 60px; } }
+    @keyframes growLine { to { width:60px; } }
 
-    /* "Hello, I'm" label */
     .greeting {
-      font-size: clamp(0.85rem, 2vw, 1rem);
-      font-weight: 300;
-      color: rgba(255,255,255,0.40);
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      opacity: 0; transform: translateY(10px);
-      animation: fadeUp 0.6s ease forwards 0.5s;
-      margin-bottom: 0.35rem;
+      font-size:clamp(0.78rem,1.8vw,0.92rem); font-weight:300;
+      color:rgba(255,255,255,0.42); letter-spacing:0.26em; text-transform:uppercase;
+      opacity:0; transform:translateY(10px);
+      animation:fadeUp 0.6s ease forwards 0.5s; margin-bottom:0.3rem;
     }
 
-    /* Typewriter name */
     .name-wrap {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.6rem, 7vw, 5rem);
-      font-weight: 900;
-      color: var(--teal);
-      line-height: 1.05;
-      margin-bottom: 1.8rem;
-      min-height: 1.15em;
-      filter: drop-shadow(0 0 20px rgba(46,196,182,0.40));
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2.4rem,7vw,4.8rem); font-weight:900;
+      color:var(--teal); line-height:1.05; margin-bottom:1.8rem; min-height:1.15em;
+      filter:drop-shadow(0 0 24px rgba(46,196,182,0.50));
     }
 
     .cursor {
-      display: inline-block; width: 4px; height: 0.82em;
-      background: var(--teal); margin-left: 4px;
-      border-radius: 2px; vertical-align: middle;
-      animation: blink 0.7s step-end infinite;
+      display:inline-block; width:4px; height:0.80em;
+      background:var(--teal); margin-left:4px;
+      border-radius:2px; vertical-align:middle;
+      animation:blink 0.7s step-end infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-    /* Subtitle */
     .subtitle {
-      font-size: clamp(0.95rem, 2.2vw, 1.2rem);
-      font-weight: 400;
-      color: rgba(255,255,255,0.50);
-      opacity: 0; transform: translateY(14px);
-      line-height: 1.7;
+      font-size:clamp(0.9rem,2vw,1.15rem); font-weight:400;
+      color:rgba(255,255,255,0.52); opacity:0; transform:translateY(14px); line-height:1.7;
     }
-    .subtitle.visible { animation: fadeUp 0.7s ease forwards; }
+    .subtitle.visible { animation:fadeUp 0.7s ease forwards; }
 
-    /* Gold glowing text */
     .gold {
-      color: var(--gold); font-weight: 500;
-      animation: goldGlow 2.5s ease-in-out infinite alternate;
+      color:var(--gold); font-weight:500;
+      animation:goldGlow 2.5s ease-in-out infinite alternate;
     }
     @keyframes goldGlow {
-      0%   { text-shadow: 0 0 6px rgba(245,166,35,0.5),  0 0 14px rgba(245,166,35,0.25); }
-      50%  { text-shadow: 0 0 14px rgba(245,166,35,0.9), 0 0 32px rgba(245,166,35,0.5),  0 0 60px rgba(245,166,35,0.25); }
-      100% { text-shadow: 0 0 8px rgba(245,166,35,0.6),  0 0 22px rgba(245,166,35,0.35); }
+      0%  {text-shadow:0 0 6px rgba(245,166,35,0.50),0 0 14px rgba(245,166,35,0.25);}
+      50% {text-shadow:0 0 16px rgba(245,166,35,1.00),0 0 36px rgba(245,166,35,0.60),0 0 65px rgba(245,166,35,0.28);}
+      100%{text-shadow:0 0 8px rgba(245,166,35,0.65),0 0 24px rgba(245,166,35,0.38);}
     }
 
-    /* Scroll hint */
+    /* scroll hint */
     .scroll-hint {
-      position: fixed; bottom:2rem; left:50%; transform:translateX(-50%);
+      position:fixed; bottom:2rem; left:50%; transform:translateX(-50%);
       display:flex; flex-direction:column; align-items:center; gap:6px;
-      opacity:0; animation:fadeUp 1s ease forwards 5s; z-index:20;
+      opacity:0; animation:fadeUp 1s ease forwards 5.5s; z-index:20;
     }
-    .scroll-hint span {
-      font-size:0.65rem; letter-spacing:0.2em;
-      text-transform:uppercase; color:rgba(255,255,255,0.28);
-    }
-    .scroll-dot {
-      width:6px; height:6px; border-radius:50%; background:var(--teal);
-      animation:bounce 1.4s ease-in-out infinite;
-    }
-    @keyframes bounce { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(8px);opacity:0.4} }
+    .scroll-hint span { font-size:0.60rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(255,255,255,0.26); }
+    .scroll-dot { width:5px; height:5px; border-radius:50%; background:var(--teal); animation:bounce 1.4s ease-in-out infinite; }
+    @keyframes bounce{0%,100%{transform:translateY(0);opacity:1}50%{transform:translateY(8px);opacity:0.35}}
 
+    /* ════════════════════════════════════
+       SECTION 2 — WHO I AM
+    ════════════════════════════════════ */
+    .section-about {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 5;
+      scroll-snap-align: start;
+      padding: 2rem;
+    }
+
+    .about-card {
+      width: 90%; max-width: 1080px;
+      padding: 3.5rem 4rem;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    /* ── Profile photo area ── */
+    .photo-wrap {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* Spinning ring around photo */
+    .photo-ring {
+      position: relative;
+      width: 220px; height: 220px;
+    }
+
+    .photo-ring::before {
+      content: '';
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--teal) 0deg,
+        var(--gold) 120deg,
+        rgba(46,196,182,0.2) 240deg,
+        var(--teal) 360deg
+      );
+      animation: spinRing 6s linear infinite;
+      z-index: 1;
+    }
+
+    /* blur/fade behind the ring edge */
+    .photo-ring::after {
+      content: '';
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--teal) 0deg,
+        var(--gold) 120deg,
+        rgba(46,196,182,0.2) 240deg,
+        var(--teal) 360deg
+      );
+      filter: blur(10px);
+      animation: spinRing 6s linear infinite;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    @keyframes spinRing { to { transform: rotate(360deg); } }
+
+    /* Inner photo circle */
+    .photo-inner {
+      position: absolute; inset: 4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,
+        rgba(46,196,182,0.15) 0%,
+        rgba(255,255,255,0.06) 50%,
+        rgba(245,166,35,0.10) 100%
+      );
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      z-index: 2;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Avatar icon (silhouette) */
+    .avatar-icon {
+      width: 80px; height: 80px; opacity: 0.35;
+    }
+
+    /* Photo label */
+    .photo-label {
+      margin-top: 1.4rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.30);
+    }
+
+    /* Floating particles around photo */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .p1 { width:6px; height:6px; background:var(--teal);  top:-14px;  left:50%;  animation: orbit1 4s ease-in-out infinite; }
+    .p2 { width:4px; height:4px; background:var(--gold);  bottom:-10px; right:20%; animation: orbit2 5s ease-in-out infinite; }
+    .p3 { width:5px; height:5px; background:var(--teal);  top:50%;    right:-14px; animation: orbit3 3.5s ease-in-out infinite; }
+
+    @keyframes orbit1 {
+      0%,100% { transform:translate(0,0) scale(1); opacity:0.8; }
+      50%     { transform:translate(-8px,-12px) scale(1.4); opacity:1; }
+    }
+    @keyframes orbit2 {
+      0%,100% { transform:translate(0,0) scale(1); opacity:0.6; }
+      50%     { transform:translate(10px,8px) scale(1.5); opacity:1; }
+    }
+    @keyframes orbit3 {
+      0%,100% { transform:translate(0,0) scale(1); opacity:0.7; }
+      50%     { transform:translate(12px,-6px) scale(1.3); opacity:1; }
+    }
+
+    /* ── About text area ── */
+    .about-text { }
+
+    .about-line-accent {
+      width: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      margin-bottom: 1.6rem; border-radius: 2px;
+    }
+    .about-line-accent.animate { animation: growLine 0.8s ease forwards; }
+
+    .about-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 1.4rem;
+      filter: drop-shadow(0 0 16px rgba(46,196,182,0.25));
+      opacity: 0; transform: translateY(16px);
+    }
+    .about-heading.animate { animation: fadeUp 0.7s ease forwards 0.1s; }
+
+    .about-body {
+      display: flex; flex-direction: column; gap: 0.85rem;
+    }
+
+    .about-body p {
+      font-size: clamp(0.82rem, 1.5vw, 0.95rem);
+      font-weight: 400;
+      color: rgba(255,255,255,0.50);
+      line-height: 1.75;
+      opacity: 0; transform: translateY(12px);
+    }
+    .about-body p.animate { animation: fadeUp 0.7s ease forwards; }
+    .about-body p:nth-child(1).animate { animation-delay: 0.2s; }
+    .about-body p:nth-child(2).animate { animation-delay: 0.35s; }
+    .about-body p:nth-child(3).animate { animation-delay: 0.50s; }
+    .about-body p:nth-child(4).animate { animation-delay: 0.65s; }
+
+    /* highlight key words */
+    .about-body .hi {
+      color: var(--teal);
+      font-weight: 500;
+    }
+
+    /* ── Shared utils ── */
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-    @media (max-width:480px) { .hero { padding:2.2rem 1.8rem; } }
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .about-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 2.4rem 2rem;
+        gap: 2.4rem;
+      }
+      .photo-wrap { align-items: center; }
+      .hero { padding: 2.4rem 2rem; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Colour orbs -->
+  <!-- Fixed background -->
+  <div class="bg-layer"></div>
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
   <div class="orb orb4"></div>
-
-  <!-- Glass overlay on background -->
-  <div class="glass-bg"></div>
-
-  <!-- Falling lines -->
   <canvas id="linesCanvas"></canvas>
 
-  <!-- Hero glass card -->
-  <div class="hero">
-    <div class="line-accent"></div>
-    <div class="greeting">Hello, I'm</div>
-    <div class="name-wrap">
-      <span id="typed-name"></span><span class="cursor" id="cursor"></span>
+  <!-- ══ SECTION 1: HERO ══ -->
+  <section class="section-hero">
+    <div class="hero glass-card">
+      <div class="line-accent"></div>
+      <div class="greeting">Hello, I'm</div>
+      <div class="name-wrap">
+        <span id="typed-name"></span><span class="cursor" id="cursor"></span>
+      </div>
+      <p class="subtitle" id="subtitle">
+        Undergraduate at <span class="gold">Open University of Sri Lanka</span>
+      </p>
     </div>
-    <p class="subtitle" id="subtitle">
-      Undergraduate at <span class="gold">Open University of Sri Lanka</span>
-    </p>
-  </div>
+  </section>
 
+  <!-- scroll cue -->
   <div class="scroll-hint">
     <span>scroll</span>
     <div class="scroll-dot"></div>
   </div>
+
+  <!-- ══ SECTION 2: WHO I AM ══ -->
+  <section class="section-about">
+    <div class="about-card glass-card" id="aboutCard">
+
+      <!-- Left: Profile photo -->
+      <div class="photo-wrap">
+        <div class="photo-ring" id="photoRing">
+          <div class="photo-inner">
+            <!-- silhouette SVG avatar -->
+             <img src="E:\GitHub\Portfolio\img\profile.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+              <circle cx="40" cy="28" r="16" fill="rgba(255,255,255,0.55)"/>
+              <ellipse cx="40" cy="68" rx="26" ry="18" fill="rgba(255,255,255,0.55)"/>
+            </svg>
+          </div>
+          <!-- floating particles -->
+          <div class="particle p1"></div>
+          <div class="particle p2"></div>
+          <div class="particle p3"></div>
+        </div>
+        
+      </div>
+
+      <!-- Right: Text -->
+      <div class="about-text">
+        <div class="about-line-accent" id="aboutAccent"></div>
+        <h2 class="about-heading" id="aboutHeading">Who I Am</h2>
+        <div class="about-body" id="aboutBody">
+          <p>I'm an undergraduate <span class="hi">Bachelor of Software Engineering (Honours)</span> student at the Open University of Sri Lanka, with a passion for building impactful digital solutions. I enjoy turning complex problems into simple, elegant, and user friendly applications while collaborating with others to bring ideas to life.</p>
+          <p>My expertise lies in <span class="hi">full stack web development</span>, where I work with technologies like React, Node.js, Java, Python, and Spring Boot to create scalable and efficient systems. I'm particularly interested in designing seamless user experiences and developing applications that are both functional and visually appealing.</p>
+          <p>Beyond technical skills, I bring creativity into my work whether it's crafting intuitive UI designs, exploring innovative approaches to problem solving, or building projects that make a real difference. I'm always eager to learn, experiment, and push my boundaries as a developer.</p>
+          <p>My goal is to leverage <span class="hi">AI and modern web technologies</span> to create smart, data driven solutions that solve real world challenges and deliver meaningful user experiences.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ SCRIPTS ══ -->
 
   <!-- Typewriter -->
   <script>
@@ -214,7 +422,6 @@
     const cursorEl   = document.getElementById('cursor');
     const subtitleEl = document.getElementById('subtitle');
     let i = 0;
-
     function type() {
       if (i < fullName.length) {
         nameEl.textContent += fullName[i++];
@@ -229,76 +436,68 @@
     setTimeout(type, 900);
   </script>
 
-  <!-- Falling lines animation -->
+  <!-- About section scroll-triggered animations -->
+  <script>
+    const aboutCard    = document.getElementById('aboutCard');
+    const aboutAccent  = document.getElementById('aboutAccent');
+    const aboutHeading = document.getElementById('aboutHeading');
+    const aboutParas   = document.querySelectorAll('#aboutBody p');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          aboutAccent.classList.add('animate');
+          aboutHeading.classList.add('animate');
+          aboutParas.forEach(p => p.classList.add('animate'));
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.25 });
+
+    observer.observe(aboutCard);
+  </script>
+
+  <!-- Falling lines -->
   <script>
     const canvas = document.getElementById('linesCanvas');
     const ctx    = canvas.getContext('2d');
     let W, H, lines;
-
     const COLORS = [
-      'rgba(46,196,182,',   // teal
-      'rgba(46,196,182,',   // teal (more weight)
-      'rgba(245,166,35,',   // gold
-      'rgba(140,210,255,',  // ice blue
+      'rgba(46,196,182,', 'rgba(46,196,182,',
+      'rgba(245,166,35,', 'rgba(100,180,255,',
     ];
-
-    const rnd = (a, b) => a + Math.random() * (b - a);
-
-    function makeLine() {
+    const rnd = (a,b) => a + Math.random()*(b-a);
+    function makeLine(spread) {
       return {
-        x:     rnd(0, W),
-        y:     rnd(-H, 0),
-        len:   rnd(50, 145),
-        speed: rnd(1.0, 3.2),
-        w:     rnd(0.4, 1.7),
-        op:    rnd(0.10, 0.30),
-        drift: rnd(-0.18, 0.18),
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        x: rnd(0,W), y: spread ? rnd(-H,H*0.6) : rnd(-220,-10),
+        len: rnd(55,155), speed: rnd(0.8,3.0),
+        w: rnd(0.4,1.8), op: rnd(0.12,0.35),
+        drift: rnd(-0.20,0.20),
+        color: COLORS[Math.floor(Math.random()*COLORS.length)],
       };
     }
-
     function resize() {
       W = canvas.width  = window.innerWidth;
       H = canvas.height = window.innerHeight;
-      lines = Array.from({ length: Math.floor(W / 13) }, makeLine);
+      lines = Array.from({length: Math.floor(W/11)}, ()=>makeLine(true));
     }
-
     function draw() {
-      ctx.clearRect(0, 0, W, H);
+      ctx.clearRect(0,0,W,H);
       for (const l of lines) {
-        const g = ctx.createLinearGradient(l.x, l.y, l.x, l.y + l.len);
-        g.addColorStop(0,    l.color + '0)');
-        g.addColorStop(0.35, l.color + l.op + ')');
-        g.addColorStop(1,    l.color + '0)');
-
-        ctx.beginPath();
-        ctx.moveTo(l.x, l.y);
-        ctx.lineTo(l.x, l.y + l.len);
-        ctx.strokeStyle = g;
-        ctx.lineWidth   = l.w;
-        ctx.lineCap     = 'round';
-        ctx.stroke();
-
-        l.y += l.speed;
-        l.x += l.drift;
-
-        if (l.y > H + l.len) {
-          l.y    = rnd(-160, -20);
-          l.x    = rnd(0, W);
-          l.len  = rnd(50, 145);
-          l.speed= rnd(1.0, 3.2);
-          l.w    = rnd(0.4, 1.7);
-          l.op   = rnd(0.10, 0.30);
-          l.drift= rnd(-0.18, 0.18);
-          l.color= COLORS[Math.floor(Math.random() * COLORS.length)];
-        }
+        const g = ctx.createLinearGradient(l.x,l.y,l.x,l.y+l.len);
+        g.addColorStop(0,    l.color+'0)');
+        g.addColorStop(0.35, l.color+l.op+')');
+        g.addColorStop(1,    l.color+'0)');
+        ctx.beginPath(); ctx.moveTo(l.x,l.y); ctx.lineTo(l.x,l.y+l.len);
+        ctx.strokeStyle=g; ctx.lineWidth=l.w; ctx.lineCap='round'; ctx.stroke();
+        l.y+=l.speed; l.x+=l.drift;
+        if(l.y>H+l.len) Object.assign(l,makeLine(false));
       }
       requestAnimationFrame(draw);
     }
-
     window.addEventListener('resize', resize);
-    resize();
-    draw();
+    resize(); draw();
   </script>
+
 </body>
 </html>
